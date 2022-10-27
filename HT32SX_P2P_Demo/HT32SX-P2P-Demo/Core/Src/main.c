@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -61,7 +62,8 @@ void SystemClock_Config(void);
 uint8_t RxLength = 0;
 uint8_t aTransmitBuffer[TX_BUFFER_SIZE] = {"Hello, World!"};
 uint8_t aReceiveBuffer[RX_BUFFER_SIZE] = {0x00};
-
+uint32_t counter,_Address=0x08080000;
+HAL_StatusTypeDef _status = HAL_ERROR;
 /* USER CODE END 0 */
 
 /**
@@ -94,6 +96,7 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
 	printf("HT32SX P2P Application.\n");
@@ -102,10 +105,36 @@ int main(void)
 
 	HT_P2P_Init();
 
+	counter = *(__IO uint32_t *)_Address;
+
+	printf("start %lu\n",counter);
+
+	counter++;
+
+	_status = HAL_FLASH_Unlock();
+	if(_status == HAL_OK){
+		printf("FLASH Unlock: %d\n",_status);
+		_status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, counter);
+		if(_status == HAL_OK) printf("FLASH prog: %d\n",_status);
+		else printf("FLASH prog error: %d\n",_status);
+		//*(__IO uint32_t *)_Address = counter;
+		_status = HAL_FLASH_Lock();
+		if(_status==HAL_OK)printf("FLASH lock: %d\n",_status);
+		else printf("FLASH lock error: %d\n",_status);
+	}
+	else printf("FLASH Unlock error: %d\n",_status);
+
+	counter = *(__IO uint32_t *)_Address;
+    printf("end   %lu\n",counter);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+   while (1);/*{
+    	HAL_I2C_Master_Transmit(hi2c1, DevAddress, pData, Size, Timeout);
+    	HAL_I2C_Master_Receive(hi2c1, DevAddress, pData, Size, Timeout)
+    }*/
 	while (1)
 	{
     /* USER CODE END WHILE */
@@ -113,6 +142,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 		P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
+		//HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
+		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 	}
   /* USER CODE END 3 */
 }
@@ -154,8 +185,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_I2C1;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();

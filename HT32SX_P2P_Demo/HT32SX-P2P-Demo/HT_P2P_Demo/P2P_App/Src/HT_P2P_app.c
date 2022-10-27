@@ -142,8 +142,11 @@ void P2P_DataReceived(uint8_t *pRxBuff, uint8_t *cRxlen) {
 		i++;
 	}
 
-	if(xRxFrame.Cmd != ACK_OK)
+
+	if(xRxFrame.Cmd != ACK_OK) {
 		printf("%s\n", (char *)received_str);
+		printf("%u\n", xRxFrame.Cmdtag);
+	}
 
 	if(xRxFrame.Cmd == LED_TOGGLE)
 		SM_State = SM_STATE_TOGGLE_LED;

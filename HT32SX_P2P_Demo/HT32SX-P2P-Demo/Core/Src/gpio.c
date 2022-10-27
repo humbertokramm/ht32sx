@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -51,10 +51,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(RADIO_SPI_CS_PIN_GPIO_Port, RADIO_SPI_CS_PIN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RADIO_GPIO_SDN_PIN_GPIO_Port, RADIO_GPIO_SDN_PIN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, HOLDMCU_Pin|USER_LED_PIN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(USER_LED_PIN_GPIO_Port, USER_LED_PIN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RADIO_GPIO_SDN_PIN_GPIO_Port, RADIO_GPIO_SDN_PIN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = RADIO_SPI_CS_PIN_Pin;
@@ -62,6 +62,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(RADIO_SPI_CS_PIN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = HOLDMCU_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(HOLDMCU_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = RADIO_GPIO_SDN_PIN_Pin;
