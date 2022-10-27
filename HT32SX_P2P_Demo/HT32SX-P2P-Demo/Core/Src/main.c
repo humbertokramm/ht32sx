@@ -106,24 +106,10 @@ int main(void)
 	HT_P2P_Init();
 
 	counter = *(__IO uint32_t *)_Address;
-
-	printf("start %lu\n",counter);
-
-	counter++;
-
-	_status = HAL_FLASH_Unlock();
-	if(_status == HAL_OK){
-		printf("FLASH Unlock: %d\n",_status);
-		_status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, counter);
-		if(_status == HAL_OK) printf("FLASH prog: %d\n",_status);
-		else printf("FLASH prog error: %d\n",_status);
-		//*(__IO uint32_t *)_Address = counter;
-		_status = HAL_FLASH_Lock();
-		if(_status==HAL_OK)printf("FLASH lock: %d\n",_status);
-		else printf("FLASH lock error: %d\n",_status);
-	}
-	else printf("FLASH Unlock error: %d\n",_status);
-
+	printf("start %lu\n",counter++);
+	HAL_FLASH_Unlock();
+	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, counter);
+	HAL_FLASH_Lock();
 	counter = *(__IO uint32_t *)_Address;
     printf("end   %lu\n",counter);
 
