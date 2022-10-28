@@ -23,7 +23,6 @@
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "HT_P2P_app.h"
@@ -33,6 +32,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+#include "RV_3032.h"
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -111,21 +111,20 @@ int main(void)
 	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, counter);
 	HAL_FLASH_Lock();
 	counter = *(__IO uint32_t *)_Address;
-    printf("end   %lu\n",counter);
+	printf("end   %lu\n",counter);
 
+
+	printf("Value:  %u\n",readRegister(RV3032_ADDR));
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-   while (1);/*{
-    	HAL_I2C_Master_Transmit(hi2c1, DevAddress, pData, Size, Timeout);
-    	HAL_I2C_Master_Receive(hi2c1, DevAddress, pData, Size, Timeout)
-    }*/
 	while (1)
 	{
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		//HAL_I2C_Master_Receive(hi2c1, DevAddress, pData, Size, Timeout);
 
 		P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
 		//HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
