@@ -683,8 +683,16 @@ bool writeBit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite) //If we see 
 uint8_t readRegister(uint8_t addr)
 {
 	uint8_t *pData;
-	if( HAL_I2C_Master_Receive(hi2c1, addr, pData, 8, 100) == HAL_OK)
-		return *pData;
+	/*if( HAL_I2C_Master_Receive(&hi2c1, addr, pData, 8, 1000) == HAL_OK)
+		return *pData;*/
+
+	//printf("erro de leitura do RTC\n");
+
+	//HAL_I2C_Master_Receive (&hi2c1, RV3032_ADDR, pData, 8, 1);
+	HAL_I2C_Master_Transmit(&hi2c1, (RV3032_ADDR<<1)+1, pData, 9, 1);
+	//HAL_I2C_Master_Receive(&hi2c1, addr, pData, 8, 1000);
+	//HAL_I2C_Master_Receive(&hi2c1, RV3032_ADDR, pData, 8, 1000);
+	return *pData;
 
 	/*_i2cPort->beginTransmission(RV3032_ADDR);
 	_i2cPort->write(addr);
@@ -696,7 +704,7 @@ uint8_t readRegister(uint8_t addr)
 	{
 		return _i2cPort->read();
 	}*/
-	return false;
+	//return false;
 }
 
 bool writeRegister(uint8_t addr, uint8_t val)

@@ -61,8 +61,8 @@ void setup() {
 }
 
 void loop() {
-  if (rtc.updateTime() == false) //Updates the time variables from RTC
-  {
+ /* if (rtc.updateTime() == false) //Updates the time variables from RTC
+  {Sessio
     Serial.println("RTC failed to update");
   }
 	else{
@@ -75,6 +75,8 @@ void loop() {
 		Serial.println(rtc.getTemperature());
 		
 		
-	}
+	}*/
+	
+		Serial.println(rtc.getTemperature());
   delay(1000);
 }

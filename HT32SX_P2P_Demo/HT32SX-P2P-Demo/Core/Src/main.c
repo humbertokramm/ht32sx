@@ -19,10 +19,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "i2c.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "HT_P2P_app.h"
@@ -60,10 +62,15 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 uint8_t RxLength = 0;
-uint8_t aTransmitBuffer[TX_BUFFER_SIZE] = {"Hello, World!"};
+uint8_t aTransmitBuffer[TX_BUFFER_SIZE] = {"12345"};
 uint8_t aReceiveBuffer[RX_BUFFER_SIZE] = {0x00};
 uint32_t counter,_Address=0x08080000;
-HAL_StatusTypeDef _status = HAL_ERROR;
+uint32_t counter2,_Address2=0x08080004;
+
+uint16_t RtcSize = 8;
+uint32_t RtcTimeout = 1000;
+uint16_t tensao = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -97,6 +104,7 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   MX_I2C1_Init();
+  MX_ADC_Init();
   /* USER CODE BEGIN 2 */
 
 	printf("HT32SX P2P Application.\n");
@@ -105,16 +113,27 @@ int main(void)
 
 	HT_P2P_Init();
 
+	//HAL_ADCEx_Calibration_Start();
+	//tensao = HAL_ADC_GetValue(ADC1);
+	//printf("Tensão %lu\n",counter);
+
+
 	counter = *(__IO uint32_t *)_Address;
-	printf("start %lu\n",counter++);
 	HAL_FLASH_Unlock();
-	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, counter);
+	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address, ++counter);
 	HAL_FLASH_Lock();
 	counter = *(__IO uint32_t *)_Address;
-	printf("end   %lu\n",counter);
+	printf("Reinicializações %lu\n",counter);
 
+	counter2 = *(__IO uint32_t *)_Address2;
+	printf("Transmissions    %lu\n", counter2);
+	counter2 = 0;
+	HAL_FLASH_Unlock();
+	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address2, counter2);
+	HAL_FLASH_Lock();
 
-	printf("Value:  %u\n",readRegister(RV3032_ADDR));
+	//printf("Value:  %u\n",readRegister(RV3032_ADDR));
+	//while (1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -124,11 +143,24 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		//HAL_I2C_Master_Receive(hi2c1, DevAddress, pData, Size, Timeout);
+		//printf("Value:  %u\n",readRegister(RV3032_ADDR));
+		//printf("Temp :  %u\n",getTemperature());
+		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
+		getTemperature();
 
-		P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
-		//HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
-		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
+		//HAL_I2C_Master_Receive(hi2c1, RtcDevAddress, pData, RtcSize, RtcTimeout);
+
+		//P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
+		SM_State = SM_STATE_SEND_DATA;
+
+		counter2 = *(__IO uint32_t *)_Address2;
+		HAL_FLASH_Unlock();
+		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address2, ++counter2);
+		HAL_FLASH_Lock();
+
+		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, LOW);
+		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
+		HAL_Delay(4000);
 	}
   /* USER CODE END 3 */
 }
