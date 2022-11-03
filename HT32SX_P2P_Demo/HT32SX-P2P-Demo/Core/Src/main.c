@@ -132,6 +132,8 @@ int main(void)
 	HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address2, counter2);
 	HAL_FLASH_Lock();
 
+
+	P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
 	//printf("Value:  %u\n",readRegister(RV3032_ADDR));
 	//while (1);
   /* USER CODE END 2 */
@@ -146,17 +148,24 @@ int main(void)
 		//printf("Value:  %u\n",readRegister(RV3032_ADDR));
 		//printf("Temp :  %u\n",getTemperature());
 		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
+
+		//Comunica com o RTC
 		getTemperature();
+		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 
-		//HAL_I2C_Master_Receive(hi2c1, RtcDevAddress, pData, RtcSize, RtcTimeout);
-
-		//P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
-		SM_State = SM_STATE_SEND_DATA;
-
+		//Lê a memória
 		counter2 = *(__IO uint32_t *)_Address2;
+
+		//Salva na memória
 		HAL_FLASH_Unlock();
 		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address2, ++counter2);
 		HAL_FLASH_Lock();
+		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
+
+		//Executa a transmissão
+		Set_Transmission();
+		do P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
+		while(checkEndTX());
 
 		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, LOW);
 		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);

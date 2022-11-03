@@ -105,6 +105,10 @@ void Set_KeyStatus(FlagStatus val) {
 	HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
+void Set_Transmission() {
+	SM_State = SM_STATE_SEND_DATA;
+}
+
 void P2P_StartRx(void) {
 	printf("Start RX...\n");
 	AppliReceiveBuff();
@@ -171,7 +175,8 @@ void P2P_SendAck(uint8_t *pTxBuff, uint8_t cTxlen) {
 }
 
 void P2P_SendData(uint8_t *pTxBuff, uint8_t cTxlen) {
-	printf("Sending data...\n");
+	//printf("Sending data...\n");
+	printf("->\n");
 
 	xTxFrame.Cmd = LED_TOGGLE;
 	xTxFrame.CmdLen = 0x01;
@@ -182,6 +187,11 @@ void P2P_SendData(uint8_t *pTxBuff, uint8_t cTxlen) {
 
 	AppliSendBuff(&xTxFrame, xTxFrame.DataLen);
 	SM_State = SM_STATE_WAIT_FOR_TX_DONE;
+}
+
+char checkEndTX() {
+	if(SM_State == SM_STATE_WAIT_FOR_TX_DONE) return 1;
+	return 0;
 }
 
 void P2P_WaitForTxDone(void) {
@@ -230,7 +240,8 @@ void P2P_Process(uint8_t *pTxBuff, uint8_t cTxlen, uint8_t *pRxBuff, uint8_t cRx
 
 	switch(SM_State) {
 	case SM_STATE_START_RX:
-		P2P_StartRx();
+		//Comentada essa função para nunca ligar a escuta;
+		//P2P_StartRx();
 		break;
 	case SM_STATE_WAIT_FOR_RX_DONE:
 		P2P_WaitForRxDone();

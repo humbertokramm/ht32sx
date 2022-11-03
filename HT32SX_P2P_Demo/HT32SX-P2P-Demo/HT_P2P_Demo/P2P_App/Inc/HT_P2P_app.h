@@ -231,7 +231,7 @@ void P2PInterruptHandler(void);
  * \retval none
  *******************************************************************/
 void Set_KeyStatus(FlagStatus val);
-
+void Set_Transmission();
 /*!******************************************************************
  * \fn void P2P_StartRx(void)
  * \brief Start RX state routine.
@@ -276,7 +276,7 @@ void P2P_WaitForTxDone(void);
  * \retval none
  *******************************************************************/
 void P2P_SendData(uint8_t *pTxBuff, uint8_t cTxlen);
-
+char checkEndTX();
 /*!******************************************************************
  * \fn void P2P_SendData(uint8_t *pTxBuff, uint8_t cTxlen)
  * \brief Send Ack state routine.
