@@ -33,7 +33,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+//#include "../Inc/RV3032.h"
 #include "RV_3032.h"
 /* USER CODE END PTD */
 
@@ -70,6 +70,10 @@ uint32_t counter2,_Address2=0x08080004;
 uint16_t RtcSize = 8;
 uint32_t RtcTimeout = 1000;
 uint16_t tensao = 0;
+
+int8_t temperatura = 0;
+uint32_t epoch;
+uint32_t payload;
 
 /* USER CODE END 0 */
 
@@ -114,8 +118,8 @@ int main(void)
 	HT_P2P_Init();
 
 	//HAL_ADCEx_Calibration_Start();
-	//tensao = HAL_ADC_GetValue(ADC1);
-	//printf("Tensão %lu\n",counter);
+	tensao = HAL_ADC_GetValue(ADC1);
+	printf("Tensão %lu\n",counter);
 
 
 	counter = *(__IO uint32_t *)_Address;
@@ -146,11 +150,24 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		//printf("Value:  %u\n",readRegister(RV3032_ADDR));
-		//printf("Temp :  %u\n",getTemperature());
+		printf("tensao :  %u\n",tensao);
 		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
 
 		//Comunica com o RTC
-		getTemperature();
+
+		updateTime();
+		printf("Data %s\n",stringDate());
+
+		temperatura = getTemperature();
+		epoch = getEpoch();
+
+		payload = epoch & 0xFFFFFF00;
+		payload |= (temperatura+128);
+
+
+
+
+
 		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 
 		//Lê a memória
@@ -162,14 +179,29 @@ int main(void)
 		HAL_FLASH_Lock();
 		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 
+		aTransmitBuffer[0] = payload>>24;
+		aTransmitBuffer[1] = payload>>16;
+		aTransmitBuffer[2] = payload>>8;
+		aTransmitBuffer[3] = payload;
+
+
 		//Executa a transmissão
 		Set_Transmission();
 		do P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
 		while(checkEndTX());
 
 		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, LOW);
+
+
+		printf("Epoc %lu\n",epoch);
+		printf("Temp :  %u\n",temperatura);
+		printf("payload : %X\n",payload);
+		printf("payload S: %X,%X,%X,%X\n",aTransmitBuffer[3],aTransmitBuffer[2],aTransmitBuffer[1],aTransmitBuffer[0]);
+
+
 		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
-		HAL_Delay(4000);
+
+		HAL_Delay(2000);
 	}
   /* USER CODE END 3 */
 }

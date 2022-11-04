@@ -61,13 +61,12 @@ void setup() {
 }
 
 void loop() {
- /* if (rtc.updateTime() == false) //Updates the time variables from RTC
-  {Sessio
+ if (rtc.updateTime() == false) //Updates the time variables from RTC
+  {
     Serial.println("RTC failed to update");
   }
 	else{
 		String currentDate = rtc.stringDate(); //Get the current date in mm/dd/yyyy format (we're weird)
-		//String currentDate = rtc.stringDate(); //Get the current date in dd/mm/yyyy format
 		String currentTime = rtc.stringTime(); //Get the time
 		Serial.print(currentDate);
 		Serial.print(" ");
@@ -75,8 +74,8 @@ void loop() {
 		Serial.println(rtc.getTemperature());
 		
 		
-	}*/
+	}
 	
-		Serial.println(rtc.getTemperature());
+		//Serial.println(rtc.getTemperature());
   delay(1000);
 }
