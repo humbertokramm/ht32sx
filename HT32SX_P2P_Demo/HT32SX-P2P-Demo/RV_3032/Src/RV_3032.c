@@ -446,6 +446,36 @@ float  getCalibrationOffset()
 	return value * .2384;
 }
 
+
+uint8_t  getEepromPMU()
+{
+	return readRegister(RV3032_EEPROM_PMU);
+}
+uint8_t  getEepromOffset()
+{
+	return readRegister(RV3032_EEPROM_OFFSET);
+}
+uint8_t  getEepromClkout_1()
+{
+	return readRegister(RV3032_EEPROM_CLKOUT_1);
+}
+uint8_t  getEepromClkout_2()
+{
+	return readRegister(RV3032_EEPROM_CLKOUT_2);
+}
+uint8_t  getEepromTreference_0()
+{
+	return readRegister(RV3032_EEPROM_TREFERENCE_0);
+}
+uint8_t  getEepromTreference_1()
+{
+	return readRegister(RV3032_EEPROM_TREFERENCE_1);
+}
+
+
+
+
+
 bool setEVICalibration(bool eviCalibration)
 {
   return write1Bit(RV3032_CONTROL2, CONTROL2_STOP, eviCalibration);
@@ -453,7 +483,7 @@ bool setEVICalibration(bool eviCalibration)
 
 bool setEVIDebounceTime(uint8_t debounceTime)
 {
-	return writeBit(RV3032_EVI_CONTROL, EVI_CONTROL_ET, debounceTime);
+	return write2Bit(RV3032_EVI_CONTROL, EVI_CONTROL_ET, debounceTime);
 }
 
 bool setEVIEdgeDetection(bool edge)
@@ -488,7 +518,7 @@ bool setCountdownTimerEnable(bool timerState)
 
 bool setCountdownTimerFrequency(uint8_t countdownTimerFrequency)
 {
-	return writeBit(RV3032_CONTROL1, CONTROL1_TD, countdownTimerFrequency);
+	return write2Bit(RV3032_CONTROL1, CONTROL1_TD, countdownTimerFrequency);
 }
 
 bool setCountdownTimerClockTicks(uint16_t clockTicks)
@@ -506,7 +536,7 @@ bool setCountdownTimerClockTicks(uint16_t clockTicks)
 bool setClockOutTimerFrequency(uint8_t clockOutTimerFrequency)
 {
   write1Bit(RV3032_EEPROM_CLKOUT_2, EEPROM_CLKOUT2_FD, DISABLE);
-	return writeBit(RV3032_EEPROM_CLKOUT_2, EEPROM_CLKOUT2_FD, clockOutTimerFrequency);
+	return write2Bit(RV3032_EEPROM_CLKOUT_2, EEPROM_CLKOUT2_FD, clockOutTimerFrequency);
 }
 
 bool getCountdownTimerEnable()
@@ -672,7 +702,7 @@ bool write1Bit(uint8_t regAddr, uint8_t bitAddr, bool bitToWrite)
 	return writeRegister(regAddr, value);
 }
 
-bool writeBit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite) //If we see an unsigned 8-bit, we know we have to write two bits.
+bool write2Bit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite) //If we see an unsigned 8-bit, we know we have to write two bits.
 {
 	uint8_t value = readRegister(regAddr);
 	value &= ~(3 << bitAddr);
@@ -680,76 +710,72 @@ bool writeBit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite) //If we see 
 	return writeRegister(regAddr, value);
 }
 
+bool checkI2Cerror(uint8_t v)
+{
+	if(v == HAL_OK) return false;
+	else {
+		printf("i2c error\n");
+		return true;
+	}
+}
+
 uint8_t readRegister(uint8_t addr)
 {
-	uint8_t pData[12];
+	uint8_t pData[12],ret;
 	pData[0]=addr;
 
-	HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
-	HAL_I2C_Master_Receive (&hi2c1, RV3032_ADDR<<1, pData, 2, 1);
+	ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	if(checkI2Cerror(ret)) return false;
+	ret = HAL_I2C_Master_Receive (&hi2c1, RV3032_ADDR<<1, pData, 2, 1);
+	if(checkI2Cerror(ret)) return false;
 
 	return *pData;
 }
 
 bool writeRegister(uint8_t addr, uint8_t val)
 {
-	uint8_t pData[12];
+	uint8_t pData[12],ret;
 	uint8_t pValue[12];
 
 	pData[0]=addr;
 	pValue[0]=val;
 
-	HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
-	HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pValue, 1, 1);
+	ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	if(checkI2Cerror(ret)) return false;
+	ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pValue, 1, 1);
+	if(checkI2Cerror(ret)) return false;
 
 	return(true);
 }
 
 bool writeMultipleRegisters(uint8_t addr, uint8_t * values, uint8_t len)
 {
-	uint8_t pData[12];
+	uint8_t pData[12],ret;
 	pData[0]=addr;
 
-	HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	if(checkI2Cerror(ret)) return false;
 
 	for (uint8_t i = 0; i < len; i++)
 	{
-		HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, values+i, 1, 1);
+		ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, values+i, 1, 1);
+		if(checkI2Cerror(ret)) return false;
 	}
-
-	/*_i2cPort->beginTransmission(RV3032_ADDR);
-	_i2cPort->write(addr);
-	for (uint8_t i = 0; i < len; i++)
-	{
-		_i2cPort->write(values[i]);
-	}
-
-	if (_i2cPort->endTransmission() != 0)
-		return (false); //Error: Sensor did not ack*/
 	return(true);
 }
 
 bool readMultipleRegisters(uint8_t addr, uint8_t * dest, uint8_t len)
 {
-	uint8_t pData[12];
+	uint8_t pData[12],ret;
 	pData[0]=addr;
 
-	HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	ret = HAL_I2C_Master_Transmit(&hi2c1, RV3032_ADDR<<1, pData, 1, 1);
+	if(checkI2Cerror(ret)) return false;
 
 	for (uint8_t i = 0; i < len; i++)
 	{
-		HAL_I2C_Master_Receive(&hi2c1, RV3032_ADDR<<1, dest+i, 1, 1);
+		ret = HAL_I2C_Master_Receive(&hi2c1, RV3032_ADDR<<1, dest+i, 1, 1);
+		if(checkI2Cerror(ret)) return false;
 	}
-	/*_i2cPort->beginTransmission(RV3032_ADDR);
-	_i2cPort->write(addr);
-	if (_i2cPort->endTransmission() != 0)
-		return (false); //Error: Sensor did not ack
-
-	_i2cPort->requestFrom(static_cast<uint8_t>(RV3032_ADDR), len);
-	for (uint8_t i = 0; i < len; i++)
-	{
-		dest[i] = _i2cPort->read();
-	}
-	*/
 	return(true);
 }

@@ -74,13 +74,23 @@ uint16_t tensao = 0;
 int8_t temperatura = 0;
 uint32_t epoch;
 uint32_t payload;
-
+float tensaof;
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
+void _printbits(uint32_t v,uint8_t len)
+{
+    uint8_t i;
+    printf("0b");
+    for (i=len ; i>0 ;i--){
+        if(v&(1<<(i-1))) printf("1");
+        else printf("0");
+    }
+    printf("\n");
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -118,12 +128,9 @@ int main(void)
 	HT_P2P_Init();
 
 	HAL_ADC_Start(&hadc);
-	HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_TEMPSENSOR);
+	HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_0);
 	tensao = HAL_ADC_GetValue(&hadc);
 	HAL_ADC_Stop(&hadc);
-	//HAL_ADCEx_Calibration_Start();
-	//tensao = HAL_ADC_GetValue(ADC1);
-	printf("Tensão %lu\n",counter);
 
 
 	counter = *(__IO uint32_t *)_Address;
@@ -141,13 +148,24 @@ int main(void)
 	HAL_FLASH_Lock();
 
 
-	P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
+	//P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
 	//printf("Value:  %u\n",readRegister(RV3032_ADDR));
 	//while (1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+	//S2LPShutdownInit();
+
+		/* Be sure that it is driving the device to be in shutdown*/
+	//S2LPShutdownEnter();
+	//while(1){
+
+		//HT_McuApi_enterGpioLowPower();
+
+	HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
+	//}
 	while (1)
 	{
     /* USER CODE END WHILE */
@@ -155,17 +173,20 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		//printf("Value:  %u\n",readRegister(RV3032_ADDR));
 		HAL_ADC_Start(&hadc);
-		HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_TEMPSENSOR);
-		tensao = HAL_ADC_GetValue(&hadc);
+		HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_0);
+		tensao = HAL_ADC_GetValue(&hadc)*0.1363;
 		HAL_ADC_Stop(&hadc);
+		printf("tensao :  %u.%u\n",tensao/100,tensao%100);
 
-		printf("tensao :  %u\n",tensao);
-		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
+
+		//HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
 
 		//Comunica com o RTC
 
 		updateTime();
 		printf("Data %s\n",stringDate());
+		printf("Data %s\n",stringTime());
+
 
 		temperatura = getTemperature();
 		epoch = getEpoch();
@@ -177,7 +198,7 @@ int main(void)
 
 
 
-		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
+		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 
 		//Lê a memória
 		counter2 = *(__IO uint32_t *)_Address2;
@@ -186,7 +207,7 @@ int main(void)
 		HAL_FLASH_Unlock();
 		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, _Address2, ++counter2);
 		HAL_FLASH_Lock();
-		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
+		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);
 
 		aTransmitBuffer[0] = payload>>24;
 		aTransmitBuffer[1] = payload>>16;
@@ -199,13 +220,22 @@ int main(void)
 		do P2P_Process(aTransmitBuffer, TX_BUFFER_SIZE, aReceiveBuffer, RxLength);
 		while(checkEndTX());
 
-		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, LOW);
+		//HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, LOW);
 
 
 		printf("Epoc %lu\n",epoch);
 		printf("Temp :  %u\n",temperatura);
 		printf("payload : %X\n",payload);
 		printf("payload S: %X,%X,%X,%X\n",aTransmitBuffer[3],aTransmitBuffer[2],aTransmitBuffer[1],aTransmitBuffer[0]);
+
+
+		printf("getEepromPMU() "); _printbits(getEepromPMU(),8);
+		printf("getEepromOffset() "); _printbits(getEepromOffset(),8);
+		printf("getEepromClkout_1() "); _printbits(getEepromClkout_1(),8);
+		printf("getEepromClkout_2() "); _printbits(getEepromClkout_2(),8);
+		printf("getEepromTreference_0() "); _printbits(getEepromTreference_0(),8);
+		printf("getEepromTreference_1() "); _printbits(getEepromTreference_1(),8);
+
 
 
 		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin);

@@ -50,13 +50,16 @@ Novembro 27, 2022
 #define RV3032_SECONDS_CAPTURE       0x28
 #define RV3032_MINUTES_CAPTURE       0x29
 #define RV3032_HOURS_CAPTURE         0x2A
-//#define RV3032_DAY_CAPTURE         0x2B //Not used, can configure EVI Timestamps to display day, month, and year if desired
-//#define RV3032_MONTH_CAPTURE       0x2C
-//#define RV3032_YEAR_CAPTURE        0x2D
-#define RV3032_EEPROM_OFFSET         0xC1
-//#define RV3032_EEPROM_CLKOUT_1     0xC2 //Used for HF mode CLKOUT readings, default is XTAL mode
-#define RV3032_EEPROM_CLKOUT_2       0xC3
+#define RV3032_DAY_CAPTURE           0x2B //Not used, can configure EVI Timestamps to display day, month, and year if desired
+#define RV3032_MONTH_CAPTURE         0x2C
+#define RV3032_YEAR_CAPTURE          0x2D
 
+#define RV3032_EEPROM_PMU            0xC0
+#define RV3032_EEPROM_OFFSET         0xC1
+#define RV3032_EEPROM_CLKOUT_1       0xC2 //Used for HF mode CLKOUT readings, default is XTAL mode
+#define RV3032_EEPROM_CLKOUT_2       0xC3
+#define RV3032_EEPROM_TREFERENCE_0   0xC4
+#define RV3032_EEPROM_TREFERENCE_1   0xC5
 
 //Enable Bits for Alarm Registers
 #define ALARM_ENABLE						7
@@ -213,6 +216,13 @@ enum time_order {
 	bool setCalibrationOffset(float ppm);
 	float getCalibrationOffset();
 	
+	uint8_t  getEepromPMU();
+	uint8_t  getEepromOffset();
+	uint8_t  getEepromClkout_1();
+	uint8_t  getEepromClkout_2();
+	uint8_t  getEepromTreference_0();
+	uint8_t  getEepromTreference_1();
+
 	bool setEVICalibration(bool eviCalibration);
 	bool setEVIDebounceTime(uint8_t debounceTime);
 	bool setEVIEdgeDetection(bool edge);
@@ -262,7 +272,8 @@ enum time_order {
 	bool readBit(uint8_t regAddr, uint8_t bitAddr);
 	uint8_t readTwoBits(uint8_t regAddr, uint8_t bitAddr);
 	bool write1Bit(uint8_t regAddr, uint8_t bitAddr, bool bitToWrite);
-	bool writeBit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite);
+	bool write2Bit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite);
+	bool checkI2Cerror(uint8_t v);
 	uint8_t readRegister(uint8_t addr);
 	bool writeRegister(uint8_t addr, uint8_t val);
 	bool readMultipleRegisters(uint8_t addr, uint8_t * dest, uint8_t len);
