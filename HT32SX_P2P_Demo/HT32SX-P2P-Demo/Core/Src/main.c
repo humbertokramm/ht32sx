@@ -117,8 +117,12 @@ int main(void)
 
 	HT_P2P_Init();
 
+	HAL_ADC_Start(&hadc);
+	HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_TEMPSENSOR);
+	tensao = HAL_ADC_GetValue(&hadc);
+	HAL_ADC_Stop(&hadc);
 	//HAL_ADCEx_Calibration_Start();
-	tensao = HAL_ADC_GetValue(ADC1);
+	//tensao = HAL_ADC_GetValue(ADC1);
 	printf("Tensão %lu\n",counter);
 
 
@@ -150,6 +154,11 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		//printf("Value:  %u\n",readRegister(RV3032_ADDR));
+		HAL_ADC_Start(&hadc);
+		HAL_ADC_PollForConversion(&hadc,ADC_CHANNEL_TEMPSENSOR);
+		tensao = HAL_ADC_GetValue(&hadc);
+		HAL_ADC_Stop(&hadc);
+
 		printf("tensao :  %u\n",tensao);
 		HAL_GPIO_WritePin(HOLDMCU_GPIO_Port,HOLDMCU_Pin, HIGH);
 
