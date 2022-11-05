@@ -90,6 +90,12 @@ Novembro 27, 2022
 #define STATUS_PORF             1 // Power On Reset Flag
 #define STATUS_VLF              0 // Voltage Low Flag
 
+//EEPROM Power Management Unit (PMU)
+#define PMU_NCLKE               6 // Not CLKOUT Enable
+#define PMU_BSM                 4 // Backup Switchover Mode
+#define PMU_TCR                 2 // Trickle Charger Series Resistance
+#define PMU_TCM                 0 // Trickle Charger Mode
+
 //Control 1 Register Bits
 #define CONTROL1_USEL           4 // Update Interrupt Select
 #define CONTROL1_TE             3 // Periodic Countdown Timer Enable
@@ -222,6 +228,8 @@ enum time_order {
 	uint8_t  getEepromClkout_2();
 	uint8_t  getEepromTreference_0();
 	uint8_t  getEepromTreference_1();
+	bool setNCLKE(bool value);
+	bool setBSM(uint8_t value);
 
 	bool setEVICalibration(bool eviCalibration);
 	bool setEVIDebounceTime(uint8_t debounceTime);

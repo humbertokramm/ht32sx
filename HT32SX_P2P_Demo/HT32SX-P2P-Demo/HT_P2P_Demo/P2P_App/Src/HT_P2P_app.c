@@ -275,6 +275,7 @@ void AppliSendBuff(AppliFrame_t *xTxFrame, uint8_t cTxlen) {
 	uint8_t xIndex = 0;
 	uint8_t trxLength = 0;
 	uint8_t tmp = 0x72;
+	//uint8_t tmp = 0x12;
 
 	S2LPPktBasicAddressesInit(&xAddressInit);
 
@@ -307,7 +308,7 @@ void AppliSendBuff(AppliFrame_t *xTxFrame, uint8_t cTxlen) {
 	S2LP_SetDestinationAddress(DESTINATION_ADDRESS);
 
 #ifndef BASE_FREQ_433
-	Config_RangeExt(PA_TX);
+	Config_RangeExt(PA_MODE);
 #endif
 
 	/* S2LP Boost mode*/
@@ -342,7 +343,7 @@ void AppliReceiveBuff(void) {
 	S2LPGpioIrqClearStatus();
 
 #ifndef BASE_FREQ_433
-	Config_RangeExt(PA_RX);
+	//Config_RangeExt(PA_RX);
 #endif
 
 	/* RX command */

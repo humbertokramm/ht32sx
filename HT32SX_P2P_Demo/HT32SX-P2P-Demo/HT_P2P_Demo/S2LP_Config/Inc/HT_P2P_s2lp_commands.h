@@ -56,7 +56,7 @@
 
 #ifndef BASE_FREQ_433
 #define S2LPCmdStrobeTx()         {uint8_t tmp=0x9C;\
-                                    Config_RangeExt(PA_TX);\
+                                    Config_RangeExt(PA_MODE);\
                                      S2LPSpiWriteRegisters(0x76,1,&tmp);\
                                      S2LPCmdStrobeCommand(CMD_TX);}
 #else

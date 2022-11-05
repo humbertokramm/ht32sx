@@ -472,6 +472,14 @@ uint8_t  getEepromTreference_1()
 	return readRegister(RV3032_EEPROM_TREFERENCE_1);
 }
 
+bool setNCLKE(bool value)
+{
+	return write1Bit(RV3032_EEPROM_PMU, PMU_NCLKE, value);
+}
+bool setBSM(uint8_t value)
+{
+	return write2Bit(RV3032_EEPROM_PMU, PMU_BSM, value);
+}
 
 
 
@@ -713,10 +721,9 @@ bool write2Bit(uint8_t regAddr, uint8_t bitAddr, uint8_t bitToWrite) //If we see
 bool checkI2Cerror(uint8_t v)
 {
 	if(v == HAL_OK) return false;
-	else {
-		printf("i2c error\n");
-		return true;
-	}
+
+	printf("i2c error\n");
+	return true;
 }
 
 uint8_t readRegister(uint8_t addr)
