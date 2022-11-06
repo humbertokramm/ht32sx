@@ -16,7 +16,7 @@ We have some applications that you can use to start developing your own solution
 | Application        | Brief                                                          |
 |:-------------------|:---------------------------------------------------------------|
 | [HT32SX P2P Demo](HT32SX_P2P_Demo) | P2P basic protocol communication for HT32SX. |
-| [HT32SX P2P Coletor](HT32SX_P2P_Coletor) | P2P basic protocol communication for HT32SX. |
+| [HT32SX P2P Coletor](HT32SX-P2P-Coletor) | P2P basic protocol communication for HT32SX. |
 
 
 <hr>
