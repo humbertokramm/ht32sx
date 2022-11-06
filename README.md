@@ -15,27 +15,27 @@ As a SigFox™ Monarch enabled device, it allows globetrotter devices to seamles
 
 ## What are you looking for?
 
-* **Datasheet**? Find it [here](https://github.com/htmicron/ht32sx/blob/documents/HTSXMO32L%20Datasheet/DS001-HT32SX.pdf).
+* **Datasheet**? Find it [here](https://github.com/humbertokramm/ht32sx/blob/documents/HTSXMO32L%20Datasheet/DS001-HT32SX.pdf).
 
-* **HT32SX Documentation**? Find it [here](https://github.com/htmicron/ht32sx/tree/documents).
+* **HT32SX Documentation**? Find it [here](https://github.com/humbertokramm/ht32sx/tree/documents).
 
-* **Frequently Asked Questions**? Go [here](https://github.com/htmicron/ht32sx/tree/faq).
+* **Frequently Asked Questions**? Go [here](https://github.com/humbertokramm/ht32sx/tree/faq).
 
 * **Firmware Examples for iMCP HT32SX V2.2**? 
-  - **Code Examples:** [here](https://github.com/htmicron/ht32sx/tree/master_2).
-  - **Binary Files:** [here](https://github.com/htmicron/ht32sx/tree/binaries).
+  - **Code Examples:** [here](https://github.com/humbertokramm/ht32sx/tree/master_2).
+  - **Binary Files:** [here](https://github.com/humbertokramm/ht32sx/tree/binaries).
 
-* **HT32SX Evaluation Board V2.0 Documentation**? Find it [here](https://github.com/htmicron/ht32sx/tree/documents/Evaluation%20Board%20V2.0).
+* **HT32SX Evaluation Board V2.0 Documentation**? Find it [here](https://github.com/htmicron/humbertokramm/tree/documents/Evaluation%20Board%20V2.0).
 
-* **HT32SX Evaluation Board V3.0 Documentation**? Find it [here](https://github.com/htmicron/ht32sx/tree/documents/Evaluation%20Board%20V3.0).
+* **HT32SX Evaluation Board V3.0 Documentation**? Find it [here](https://github.com/htmicron/humbertokramm/tree/documents/Evaluation%20Board%20V3.0).
 
-* **HT32SX PCB Examples and Libraries**? Find it [here](https://github.com/htmicron/ht32sx/tree/pcb_examples).
+* **HT32SX PCB Examples and Libraries**? Find it [here](https://github.com/humbertokramm/ht32sx/tree/pcb_examples).
 
-* **HT32SX Kicad Footprint**? Find it [here](https://github.com/htmicron/thirdpartyHT32SX/tree/master/kicad).
+* **HT32SX Kicad Footprint**? Find it [here](https://github.com/humbertokramm/thirdpartyHT32SX/tree/master/kicad).
 
 * **HT32SX Altium Library**? Find it [here](https://www.snapeda.com/parts/HT32SXM032L/HT%20micron/view-part/?ref=search&t=ht32)
 
-* **GitHub Tips, Bugtrack and How to Use this Repository**? Go [here](https://github.com/htmicron/ht32sx/tree/info).
+* **GitHub Tips, Bugtrack and How to Use this Repository**? Go [here](https://github.com/humbertokramm/ht32sx/tree/info).
 
 <hr>
 
@@ -58,14 +58,8 @@ As a SigFox™ Monarch enabled device, it allows globetrotter devices to seamles
  |  |   ├─ Test Board
  |  |   ├─ README.md
  │  ├─ master_2
- |  |   ├─ AT_Commands
- |  |   ├─ Bootloader_Refresh
- |  |   ├─ Generic_Push_Button
  |  |   ├─ HT32SX_P2P_Demo
- |  |   ├─ HT32SX_P2P_Sigfox
- |  |   ├─ Monarch_MoveME
- |  |   ├─ Push_Button_RC2
- |  |   ├─ RTC_Wake_Up
+ |  |   ├─ HT32SX_P2P_Coletor
  |  |   ├─ README.md
  │  ├─ binaries
  ├─ LICENSE
@@ -76,9 +70,9 @@ As a SigFox™ Monarch enabled device, it allows globetrotter devices to seamles
 
 ## Third-party contributions:
 
-**Not verified, revised by the community:** ([here](https://github.com/htmicron/thirdpartyHT32SX/)) <br/>
+**Not verified, revised by the community:** ([here](https://github.com/humbertokramm/thirdpartyHT32SX/)) <br/>
 
-* Kicad HT32SX footprint: [here](https://github.com/htmicron/thirdpartyHT32SX/tree/master/kicad).
+* Kicad HT32SX footprint: [here](https://github.com/humbertokramm/thirdpartyHT32SX/tree/master/kicad).
 
 <hr>
 
@@ -90,7 +84,7 @@ Please contact our commercial department: imcp@htmicron.com.br
 
 #### [NEW] Wanna buy an awesome SNOC Evaluation Board based on HT32SX? 
 
-![alt text](https://github.com/htmicron/ht32sx/blob/images/snoc_board.jpg?raw=true)
+![alt text](https://github.com/humbertokramm/ht32sx/blob/images/snoc_board.jpg?raw=true)
 
 Check on the link below:
 
