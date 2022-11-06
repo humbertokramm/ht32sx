@@ -27,13 +27,6 @@
 extern "C" {
 #endif
 
-#define	PA_MODE		PA_TX
-//#define	PA_MODE		PA_SHUTDOWN
-//#define	PA_MODE		PA_TX_BYPASS
-
-#define SHOW_DATA
-#define SEND_DATA
-
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 
@@ -46,6 +39,11 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+#define	PA_MODE		PA_TX
+//#define	PA_MODE		PA_SHUTDOWN
+//#define	PA_MODE		PA_TX_BYPASS
+#define SHOW_DATA
+#define SEND_DATA
 
 /* USER CODE END ET */
 
@@ -80,6 +78,8 @@ void Error_Handler(void);
 #define SOFT_RESET_Pin GPIO_PIN_11
 #define SOFT_RESET_GPIO_Port GPIOA
 #define SOFT_RESET_EXTI_IRQn EXTI4_15_IRQn
+#define PULL_2_I2C_Pin GPIO_PIN_11
+#define PULL_2_I2C_GPIO_Port GPIOB
 #define MVMCU_Pin GPIO_PIN_0
 #define MVMCU_GPIO_Port GPIOA
 #define USER_BUTTON_PIN_Pin GPIO_PIN_6

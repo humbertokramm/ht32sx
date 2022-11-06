@@ -48,13 +48,13 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, RADIO_SPI_CS_PIN_Pin|HOLDMCU_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, RADIO_SPI_CS_PIN_Pin|HOLDMCU_Pin|USER_LED_PIN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RADIO_GPIO_SDN_PIN_GPIO_Port, RADIO_GPIO_SDN_PIN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(USER_LED_PIN_GPIO_Port, USER_LED_PIN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PULL_2_I2C_GPIO_Port, PULL_2_I2C_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = RADIO_SPI_CS_PIN_Pin;
@@ -82,6 +82,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = PULL_2_I2C_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(PULL_2_I2C_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PB2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
