@@ -27,9 +27,9 @@
 extern "C" {
 #endif
 
-//#define	PA_MODE		PA_TX
+#define	PA_MODE		PA_TX
 //#define	PA_MODE		PA_SHUTDOWN
-#define	PA_MODE		PA_TX_BYPASS
+//#define	PA_MODE		PA_TX_BYPASS
 
 #define SHOW_DATA
 #define SEND_DATA

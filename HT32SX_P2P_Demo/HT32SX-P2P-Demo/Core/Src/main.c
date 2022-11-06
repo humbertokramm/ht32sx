@@ -128,10 +128,11 @@ int main(void)
 
 		//Read RTC (1.950ms)
 		updateTime();
-		//HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,USER_LED_PIN_Pin);
+		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,USER_LED_PIN_Pin);
 
 		//Read Temperature (536us)
 		temperatura = getTemperature();
+		HAL_GPIO_TogglePin(HOLDMCU_GPIO_Port,USER_LED_PIN_Pin);
 
 		//Make Time Stamp (93.2us)
 		epoch = getEpoch();
