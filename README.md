@@ -1,6 +1,8 @@
-# HT32SX - HT Micron's Sigfox™ Monarch SiP
+# System for monitoring the temperature of perishable products
 
-## The SMALLEST Sigfox™ Monarch SiP in the world!
+## Project Based (HT32SX - HT Micron's Sigfox™ Monarch SiP)
+
+### The SMALLEST Sigfox™ Monarch SiP in the world!
 
 <div align="center">
   <img src="https://github.com/htmicron/ht32sx/blob/images/iMCP_reto.jpg">
@@ -26,8 +28,6 @@ As a SigFox™ Monarch enabled device, it allows globetrotter devices to seamles
   - **Binary Files:** [here](https://github.com/humbertokramm/ht32sx/tree/binaries).
 
 * **HT32SX Evaluation Board V2.0 Documentation**? Find it [here](https://github.com/htmicron/humbertokramm/tree/documents/Evaluation%20Board%20V2.0).
-
-* **HT32SX Evaluation Board V3.0 Documentation**? Find it [here](https://github.com/htmicron/humbertokramm/tree/documents/Evaluation%20Board%20V3.0).
 
 * **HT32SX PCB Examples and Libraries**? Find it [here](https://github.com/humbertokramm/ht32sx/tree/pcb_examples).
 
@@ -73,23 +73,6 @@ As a SigFox™ Monarch enabled device, it allows globetrotter devices to seamles
 **Not verified, revised by the community:** ([here](https://github.com/humbertokramm/thirdpartyHT32SX/)) <br/>
 
 * Kicad HT32SX footprint: [here](https://github.com/humbertokramm/thirdpartyHT32SX/tree/master/kicad).
-
-<hr>
-
-## Interested in our device? 
-
-Please contact our commercial department: imcp@htmicron.com.br
-
-<hr>
-
-#### [NEW] Wanna buy an awesome SNOC Evaluation Board based on HT32SX? 
-
-![alt text](https://github.com/humbertokramm/ht32sx/blob/images/snoc_board.jpg?raw=true)
-
-Check on the link below:
-
-[BRKHT32SX Breakout Sigfox Monarch kit](https://yadom.eu/kit-sigfox-breakout-board-brkht32sx.html)
-
-<hr>
+<br>
 
 ---
