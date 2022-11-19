@@ -17,6 +17,7 @@ We have some applications that you can use to start developing your own solution
 |:-------------------|:---------------------------------------------------------------|
 | [HT32SX P2P Demo](HT32SX_P2P_Demo) | P2P basic protocol communication for HT32SX. |
 | [HT32SX P2P Coletor](HT32SX-P2P-Coletor) | P2P basic protocol communication for HT32SX. |
+| [RTC Board Harware](https://gitlab.com/humbertokramm/TCC-RTC) | RTC Shield board for HT32SH. |
 
 
 <hr>
