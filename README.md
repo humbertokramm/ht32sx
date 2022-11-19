@@ -12,6 +12,10 @@
 git clone --single-branch --branch documents https://github.com/htmicron/ht32sx.git 
 ```
 
+## To see RTC Shield board for HT32SX.
+Please access our [**GIT LAB REPOSITORY**]([https://github.com/htmicron/ht32sx/tree/faq](https://gitlab.com/humbertokramm/TCC-RTC))
+
+
 <hr>
 
 ## Extra Documentation.
